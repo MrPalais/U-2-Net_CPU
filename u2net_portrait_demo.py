@@ -151,9 +151,12 @@ def main():
 
     # load u2net_portrait model
     net = U2NET(3,1)
-    net.load_state_dict(torch.load(model_dir))
     if torch.cuda.is_available():
+        net.load_state_dict(torch.load(model_dir)
         net.cuda()
+    else 
+        net.load_state_dict(torch.load(model_dir, map_location=torch.device('cpu')))
+
     net.eval()
 
     # do the inference one-by-one
@@ -163,10 +166,11 @@ def main():
 
         # load each image
         img = cv2.imread(im_list[i])
-        height,width = img.shape[0:2]
-        face = detect_single_face(face_cascade,img)
-        im_face = crop_face(img, face)
-        im_portrait = inference(net,im_face)
+        #height,width = img.shape[0:2]
+        #face = detect_single_face(face_cascade,img)
+        #im_face = crop_face(img, face)
+        #im_portrait = inference(net,im_face)
+        im_portrait = inference(net,img)
 
         # save the output
         cv2.imwrite(out_dir+"/"+im_list[i].split('/')[-1][0:-4]+'.png',(im_portrait*255).astype(np.uint8))
