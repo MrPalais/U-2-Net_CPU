@@ -152,9 +152,11 @@ def main():
     # load u2net_portrait model
     net = U2NET(3,1)
     if torch.cuda.is_available():
+        print("FAST CUDA MODE ACTIVATED!");
         net.load_state_dict(torch.load(model_dir)
         net.cuda()
     else 
+        print("SLOW CPU MODE ACTIVATED.");
         net.load_state_dict(torch.load(model_dir, map_location=torch.device('cpu')))
 
     net.eval()
